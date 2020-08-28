@@ -14,19 +14,27 @@ const io = socketIo(server);
 const port = process.env.PORT || 3000;
 const publicDirPath = path.join(__dirname, "../public");
 
-let count = 0;
 io.on("connection", socket => {
-    //Socket have info about client connected
-    console.log("new Web socket Connection");
-    socket.emit("countUpdated", count);
-    socket.on("increment", () => {
-        count = count + 1;
-        //Emits only to current client
-        //socket.emit("countUpdated", count);
-        //Emits to all clients connected
-        io.emit("countUpdated", count);
+    socket.emit("message", "Welcome!");
+    socket.on("sendMessage", message => {
+        io.emit("message", message);
     });
 });
+
+// let count = 0;
+// io.on("connection", socket => {
+//     //Socket have info about client connected
+//     console.log("new Web socket Connection");
+
+//     socket.emit("countUpdated", count);
+//     socket.on("increment", () => {
+//         count = count + 1;
+//         //Emits only to current client
+//         //socket.emit("countUpdated", count);
+//         //Emits to all clients connected
+//         io.emit("countUpdated", count);
+//     });
+// });
 
 app.use(express.static(publicDirPath));
 server.listen(port, () => {
