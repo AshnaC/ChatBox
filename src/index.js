@@ -15,9 +15,22 @@ const port = process.env.PORT || 3000;
 const publicDirPath = path.join(__dirname, "../public");
 
 io.on("connection", socket => {
+    // Send to current connection
     socket.emit("message", "Welcome!");
+    // Sent to all client except those connected
+    socket.broadcast.emit("message", "Intruder Alert!");
     socket.on("sendMessage", message => {
+        // Send to all clients
         io.emit("message", message);
+    });
+    // When used is disconnected
+    socket.on("disconnect", () => {
+        io.emit("message", "A user has left");
+    });
+
+    socket.on("sendLocation", ({ latitude, longitude }) => {
+        // io.emit("message", `Lat:${latitude}, Long:${longitude}`);
+        io.emit("message", `https://www.google.com/maps?q=${latitude},${longitude}`);
     });
 });
 
