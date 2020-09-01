@@ -12,7 +12,7 @@ const socketIo = require("socket.io");
 const io = socketIo(server);
 
 const port = process.env.PORT || 3000;
-const publicDirPath = path.join(__dirname, "../public");
+const publicDirPath = path.join(__dirname, "../react_public");
 
 io.on("connection", socket => {
     // Send to current connection
