@@ -50,6 +50,13 @@ io.on("connection", socket => {
 // });
 
 app.use(express.static(publicDirPath));
+app.use(express.json());
+let k= 1
+
+app.get("/users", (req, res) => {
+    k= k+1
+    res.status(200).send({k:k})
+})
 server.listen(port, () => {
     console.log(`App served from port ${port}`);
 });

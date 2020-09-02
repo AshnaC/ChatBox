@@ -1,27 +1,31 @@
-import React, { Component } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import socketIOClient from "socket.io-client";
+import socket from "./socket";
 
-class App extends Component {
-    componentDidMount() {
-        // this.socket = socketIOClient("http://127.0.0.1:3000");
-        this.socket = socketIOClient("");
-        this.socket.on("message", message => {
+function App() {
+    const [message, setMessage] = React.useState("");
+
+    useEffect(() => {
+        socket.on("message", message => {
             console.log(message);
         });
-    }
-    render() {
-        return (
-            <div className="App">
-                <h1> Hello, World </h1>
-                <button onClick={this.emitMessages}>Send Message</button>
-            </div>
-        );
-    }
+    }, []);
 
-    emitMessages = () => {
-        this.socket.emit("sendMessage", "Message from client");
+    const onMessageChange = e => {
+        setMessage(e.target.value);
     };
+
+    const emitMessages = () => {
+        socket.emit("sendMessage", message);
+    };
+
+    return (
+        <div className="App">
+            <h1> Hello, World </h1>
+            <input onChange={onMessageChange}></input>
+            <button onClick={emitMessages}>Send Message</button>
+        </div>
+    );
 }
 
 export default App;
