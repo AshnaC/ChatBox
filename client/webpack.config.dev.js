@@ -30,7 +30,17 @@ module.exports = {
     devServer: {
         contentBase: path.join(__dirname, "public/"),
         port: 3001,
-        hot: true
+        hot: true,
+        proxy: {
+            "*": {
+                target: "http://127.0.0.1:3000",
+                secure: false,
+                changeOrigin: true,
+                headers: {
+                    Connection: "keep-alive"
+                }
+            }
+        }
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
